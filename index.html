@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Little Room BLR — Private Tattoo Studio, Bengaluru</title>
+<meta name="description" content="The Little Room BLR is a private tattoo studio in Bengaluru. Black and grey realism, blackwork, fine line botanicals and ornamental linework, by appointment.">
+<meta name="theme-color" content="#0a0c0a">
+<meta property="og:title" content="The Little Room BLR — Private Tattoo Studio, Bengaluru">
+<meta property="og:description" content="A private room for slow, considered tattoo work. By appointment.">
+<link rel="icon" href="assets/logo-ink.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0c0a; --moss:#16221b; --moss-2:#22342a; --bone:#ece5d4; --bone-2:#ddd4bd;
+  --amber:#e8a24a; --oxblood:#b4281f; --muted:rgba(236,229,212,.62); --muted-ink:rgba(10,12,10,.6);
+  --serif:'Instrument Serif','Cormorant Garamond','Times New Roman',serif;
+  --sans:'Inter Tight','Helvetica Neue',Arial,sans-serif;
+  --pad:clamp(20px,3.2vw,48px);
+  --ease:cubic-bezier(.2,.8,.1,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+body{background:var(--bone);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,video,canvas,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.skip{position:fixed;left:12px;top:-60px;z-index:200;background:var(--amber);color:var(--ink);padding:10px 16px;border-radius:999px;font-weight:600;transition:top .2s}
+.skip:focus{top:12px}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.serif{font-family:var(--serif);font-weight:400}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:0;font-weight:500;font-size:15px;white-space:nowrap}
+.btn .b-label{background:var(--amber);color:var(--ink);padding:14px 22px;border-radius:999px 0 0 999px;transition:background .25s,transform .2s}
+.btn .b-arrow{border:1px solid var(--amber);color:var(--amber);padding:13px 16px;border-radius:0 999px 999px 0;margin-left:3px;transition:background .25s,color .25s,transform .2s;line-height:1}
+.btn:hover .b-label{background:var(--bone);transform:translateX(-1px)}
+.btn:hover .b-arrow{background:var(--amber);color:var(--ink);transform:translateX(2px)}
+.btn:active .b-label,.btn:active .b-arrow{transform:scale(.97)}
+.btn.on-light .b-label{background:var(--ink);color:var(--bone)}
+.btn.on-light .b-arrow{border-color:var(--ink);color:var(--ink)}
+.btn.on-light:hover .b-label{background:var(--oxblood)}
+.btn.on-light:hover .b-arrow{background:var(--ink);color:var(--bone)}
+.ulink{position:relative;display:inline-block}
+.ulink::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.ulink:hover::after{transform:scaleX(1)}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;z-index:60;top:14px;left:var(--pad);right:var(--pad);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 20px;border:1px solid rgba(236,229,212,.28);border-radius:14px;background:rgba(10,12,10,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:var(--bone)}
+.nav .brand{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.nav .mark img{height:30px;width:auto;margin:0 auto;transition:transform .5s var(--ease)}
+.nav .mark:hover img{transform:rotate(-8deg) scale(1.06)}
+.menu-btn{justify-self:end;display:flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.menu-btn i{display:block;width:26px;height:8px;border-top:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transition:width .3s var(--ease)}
+.menu-btn:hover i{width:34px}
+.overlay{position:fixed;inset:0;z-index:80;background:var(--ink);color:var(--bone);display:flex;flex-direction:column;justify-content:center;padding:var(--pad);clip-path:circle(0 at calc(100% - 60px) 40px);visibility:hidden;transition:clip-path .9s var(--ease),visibility 0s .9s}
+.overlay.open{clip-path:circle(150% at calc(100% - 60px) 40px);visibility:visible;transition:clip-path .9s var(--ease),visibility 0s}
+.overlay .close{position:absolute;top:24px;right:var(--pad);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.overlay ul{list-style:none}
+.overlay li{overflow:hidden}
+.overlay a{display:inline-flex;align-items:baseline;gap:18px;font-family:var(--serif);font-size:clamp(3rem,9vw,7.5rem);line-height:1.02;transform:translateY(105%);transition:transform .8s var(--ease),color .25s,font-style .25s}
+.overlay.open a{transform:none}
+.overlay li:nth-child(2) a{transition-delay:.05s}.overlay li:nth-child(3) a{transition-delay:.1s}.overlay li:nth-child(4) a{transition-delay:.15s}.overlay li:nth-child(5) a{transition-delay:.2s}.overlay li:nth-child(6) a{transition-delay:.25s}
+.overlay a small{font-family:var(--sans);font-size:12px;letter-spacing:.14em;color:var(--amber)}
+.overlay a:hover{color:var(--amber);font-style:italic}
+.overlay .o-foot a{font-family:var(--sans);font-size:14px;line-height:1.5;transform:none;display:inline-block;min-height:44px;color:var(--bone)}
+.overlay .o-foot a:hover{font-style:normal}
+.overlay .o-foot{position:absolute;left:var(--pad);right:var(--pad);bottom:28px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;height:100vh;height:100svh;min-height:640px;background:var(--ink);color:var(--bone);overflow:hidden;isolation:isolate}
+.hero-bg{position:absolute;inset:0;z-index:-2}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 58%;filter:brightness(1.05) saturate(1);transform:scale(1.08);animation:settle 2.8s var(--ease) .2s forwards}
+@keyframes settle{to{transform:scale(1)}}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,12,10,.55) 0%,rgba(10,12,10,0) 32%,rgba(10,12,10,0) 55%,rgba(10,12,10,.92) 100%),radial-gradient(120% 90% at 50% 40%,rgba(10,12,10,0) 40%,rgba(10,12,10,.6) 100%)}
+#inkIn,#inkFx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#inkIn{z-index:30;transition:opacity .6s}
+.hero{touch-action:pan-y}
+.btn,.menu-btn,.st-list button,.pause-btn{touch-action:manipulation}
+@media (hover:none){.frame:hover img,.frame:hover video,.st-media:hover img.on{transform:none}.band:hover .track{animation-play-state:running}}
+#inkFx{z-index:20}
+.hero .kicker{position:absolute;left:var(--pad);top:max(120px,17vh);z-index:5}
+.mask{display:block;overflow:hidden;padding:.04em .08em .06em;margin:-.04em -.08em -.06em}
+.mask>span{display:block;transform:translateY(108%);transition:transform 1.25s var(--ease)}
+.ready .mask>span{transform:none}
+.hero h1{font-weight:400}
+.hero .t1{position:absolute;z-index:5;left:var(--pad);top:max(150px,22vh);font-family:var(--serif);font-size:clamp(4.2rem,14.5vw,15rem);line-height:.86;letter-spacing:-.02em}
+.hero .t1 em{color:var(--amber)}
+.hero .t2{position:absolute;z-index:5;right:var(--pad);bottom:max(96px,12vh);font-family:var(--serif);font-size:clamp(6rem,25vw,26rem);line-height:.8;letter-spacing:-.03em;text-align:right}
+.hero .t2 .mask>span{transition-delay:.18s}
+.hero .p1{position:absolute;z-index:6;left:var(--pad);bottom:max(40px,6vh);width:min(26rem,34vw);font-size:14px;line-height:1.55;text-transform:uppercase;letter-spacing:.04em;font-weight:500}
+.hero .p2{position:absolute;z-index:6;right:var(--pad);top:max(150px,22vh);width:min(24rem,28vw);font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:500;line-height:1.6;text-align:right}
+.hero .p2 b{color:var(--amber);font-weight:600}
+.hero .cta{position:absolute;z-index:7;right:var(--pad);bottom:max(40px,6vh)}
+.fade-in{opacity:0;transform:translateY(18px);transition:opacity 1s .7s,transform 1s .7s var(--ease)}
+.ready .fade-in{opacity:1;transform:none}
+.scroll-hint{position:absolute;z-index:6;left:50%;bottom:20px;transform:translateX(-50%);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- drips (ink running off the hero into the page) ---------- */
+.drips{position:absolute;left:0;right:0;top:-2px;height:clamp(110px,16vw,230px);z-index:4;pointer-events:none;overflow:visible}
+.drips svg{width:100%;height:100%;overflow:visible}
+.drips .d{transform-origin:50% 0;transform:scaleY(0);transition:transform 2.6s var(--ease)}
+.drips.in .d{transform:scaleY(1)}
+
+/* ---------- about ---------- */
+.about{position:relative;background:var(--bone);height:320vh}
+.about .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;padding:clamp(110px,15vh,150px) var(--pad) 0}
+.about .label{position:absolute;left:var(--pad);top:clamp(120px,17vh,160px);color:var(--oxblood)}
+.about .lead{font-family:var(--sans);font-weight:500;font-size:clamp(1.4rem,2.9vw,3rem);line-height:1.08;letter-spacing:-.02em;text-transform:uppercase;max-width:1020px;margin:0 0 0 auto;margin-right:clamp(0px,8vw,130px)}
+.about .w{opacity:.16;transition:opacity .35s}
+.about .w.on{opacity:1}
+.about .w.b{font-weight:600}
+.about .w.i{font-style:italic;font-family:var(--serif);text-transform:none;font-size:1.12em;letter-spacing:0}
+.about .photo{position:absolute;left:50%;bottom:-5vh;height:min(46vh,520px);aspect-ratio:4/5;transform:translateX(-50%) rotate(-3deg);transition:transform .2s}
+.about .photo canvas{width:100%;height:100%}
+.about .cta{position:absolute;right:var(--pad);bottom:max(170px,19vh)}
+.about .tag{position:absolute;left:var(--pad);bottom:max(178px,19.5vh);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+
+/* ---------- ink edge (static splash on top of dark sections) ---------- */
+.edge{position:absolute;left:0;right:0;top:1px;height:clamp(70px,9vw,140px);transform:translateY(-100%);pointer-events:none}
+.edge svg{width:100%;height:100%;overflow:visible}
+.edge .g{transform-origin:50% 100%;transform:scaleY(.01);transition:transform 1.4s var(--ease)}
+.edge.in .g{transform:scaleY(1)}
+
+/* ---------- styles ---------- */
+.styles{position:relative;background:var(--ink);color:var(--bone);height:520vh}
+.styles .pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:grid;grid-template-columns:1fr 1.05fr;align-items:center;gap:var(--pad);padding:clamp(100px,14vh,130px) var(--pad) 40px}
+.styles .eyebrow.lab{position:absolute;left:var(--pad);top:clamp(100px,14vh,130px);color:var(--amber)}
+.st-media{position:relative;justify-self:center;width:min(100%,480px);aspect-ratio:4/5;max-height:70svh;overflow:hidden;border-radius:4px;background:var(--moss)}
+.st-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);clip-path:circle(0% at 50% 50%);transition:opacity .7s,transform 1.4s var(--ease),clip-path 1s var(--ease)}
+.st-media img.on{opacity:1;transform:scale(1);clip-path:circle(80% at 50% 50%)}
+.st-media:hover img.on{transform:scale(1.03)}
+.st-list{list-style:none;display:flex;flex-direction:column;gap:clamp(6px,1.6vh,16px)}
+.st-list button{display:block;text-align:left;width:100%}
+.st-list .t{display:flex;align-items:baseline;gap:16px;font-family:var(--serif);font-size:clamp(2rem,3.7vw,3.8rem);line-height:1.04;letter-spacing:-.015em;color:rgba(236,229,212,.28);transition:color .4s,transform .5s var(--ease)}
+.st-list .t small{font-family:var(--sans);font-size:12px;letter-spacing:.14em;color:inherit;width:30px;flex:none}
+.st-list .d{display:block;max-height:0;overflow:hidden;opacity:0;font-size:15px;color:var(--muted);max-width:34rem;padding-left:46px;text-align:left;transition:max-height .6s var(--ease),opacity .5s,margin .5s}
+.st-list li.on .t{color:var(--bone);transform:translateX(10px)}
+.st-list li.on .t small{color:var(--amber)}
+.st-list li.on .d{max-height:120px;opacity:1;margin-top:8px}
+.st-list button:hover .t{color:var(--bone)}
+.styles .cta{position:absolute;right:var(--pad);bottom:clamp(24px,5vh,46px)}
+
+/* ---------- reels ---------- */
+.reels{position:relative;background:var(--bone);padding:clamp(90px,14vh,170px) var(--pad) clamp(80px,12vh,140px)}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:clamp(30px,5vh,56px);flex-wrap:wrap}
+.sec-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.8rem,7.2vw,7.6rem);line-height:.9;letter-spacing:-.02em}
+.sec-head h2 em{color:var(--oxblood)}
+.sec-head .eyebrow{color:var(--oxblood);margin-bottom:14px;display:block}
+.pause-btn{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;border:1px solid currentColor;border-radius:999px;padding:10px 18px;transition:background .25s,color .25s}
+.pause-btn:hover{background:var(--ink);color:var(--bone)}
+.reel-grid{display:grid;grid-template-columns:.9fr 1.1fr .9fr;gap:clamp(12px,1.6vw,24px);align-items:stretch;height:min(78vh,820px)}
+.frame{position:relative;overflow:hidden;border-radius:4px;background:var(--moss)}
+.frame img,.frame video{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.frame:hover img,.frame:hover video{transform:scale(1.025)}
+.reel-grid .frame:nth-child(1){margin-top:clamp(0px,4vh,48px)}
+.reel-grid .frame:nth-child(3){margin-bottom:clamp(0px,6vh,70px)}
+
+/* ---------- room ---------- */
+.room{position:relative;background:var(--moss);color:var(--bone);min-height:100vh;min-height:100svh;display:grid;align-items:end;overflow:hidden;isolation:isolate}
+.room .bg{position:absolute;inset:-6% 0;z-index:-2}
+.room .bg img{width:100%;height:100%;object-fit:cover;object-position:50% 64%;filter:brightness(.85) saturate(1.05)}
+.room::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(22,34,27,.9) 0%,rgba(22,34,27,.1) 38%,rgba(10,12,10,.85) 100%)}
+.room .in{padding:clamp(120px,18vh,200px) var(--pad) clamp(50px,9vh,100px);display:grid;grid-template-columns:1.5fr 1fr;gap:var(--pad);align-items:end}
+.room h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.8rem,7.4vw,8rem);line-height:.88;letter-spacing:-.025em}
+.room h2 em{color:var(--amber)}
+.room .copy{font-size:16px;max-width:26rem;color:rgba(236,229,212,.82)}
+.room .copy .eyebrow{display:block;color:var(--amber);margin-bottom:14px}
+.room .facts{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.room .facts span{border:1px solid rgba(236,229,212,.3);border-radius:999px;padding:7px 14px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+
+/* ---------- process ---------- */
+.process{position:relative;background:var(--bone);padding:clamp(90px,14vh,170px) var(--pad) clamp(80px,12vh,130px)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+.step{padding:28px 24px 34px 0;border-right:1px solid rgba(10,12,10,.18);padding-left:24px;position:relative;overflow:hidden;transition:background .4s,color .4s}
+.step:first-child{padding-left:0}
+.step:last-child{border-right:0}
+.step .n{font-family:var(--serif);font-size:clamp(3.4rem,6vw,6rem);line-height:1;color:var(--oxblood);transition:transform .5s var(--ease)}
+.step h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,2.4vw,2.4rem);line-height:1.05;margin:14px 0 10px}
+.step p{font-size:15px;color:var(--muted-ink);max-width:19rem}
+.step:hover .n{transform:translateX(8px) rotate(-3deg)}
+.step::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.step:hover::after{transform:scaleX(1)}
+
+/* ---------- marquee ---------- */
+.band{position:relative;background:var(--amber);color:var(--ink);overflow:hidden;padding:clamp(22px,4vh,40px) 0;border-block:1px solid var(--ink)}
+.band .track{display:flex;width:max-content;gap:0;animation:run 38s linear infinite}
+.band:hover .track,.band.paused .track{animation-play-state:paused}
+.band span{font-family:var(--serif);font-size:clamp(2.4rem,6vw,5.6rem);line-height:1;white-space:nowrap;padding:0 .35em;display:flex;align-items:center;gap:.7em}
+.band span::after{content:"✦";font-size:.4em;font-family:var(--sans)}
+.band span:nth-child(even){font-style:italic}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* ---------- book ---------- */
+.book{position:relative;background:var(--bone);padding:clamp(90px,14vh,170px) var(--pad) clamp(80px,12vh,140px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,110px);align-items:start}
+.book h2{font-family:var(--serif);font-weight:400;font-size:clamp(3.2rem,8vw,8.4rem);line-height:.9;letter-spacing:-.02em}
+.book h2 em{color:var(--oxblood)}
+.book .eyebrow{color:var(--oxblood);display:block;margin-bottom:16px}
+.book .lede{margin-top:26px;max-width:28rem;color:var(--muted-ink);font-size:17px}
+.form{display:grid;gap:22px;grid-template-columns:1fr 1fr}
+.field{display:flex;flex-direction:column;gap:8px}
+.field.full{grid-column:1/-1}
+.field label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.field input,.field select,.field textarea{font:inherit;font-size:17px;background:transparent;border:0;border-bottom:1.5px solid var(--ink);padding:10px 0;border-radius:0;color:var(--ink);transition:border-color .25s,padding .25s}
+.field textarea{resize:vertical;min-height:110px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--oxblood);padding-left:8px}
+.form .actions{grid-column:1/-1;display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:6px}
+.form .note{font-size:13px;color:var(--muted-ink)}
+#formMsg{grid-column:1/-1;font-size:14px;min-height:20px;color:var(--oxblood)}
+
+/* ---------- footer ---------- */
+.foot{position:relative;background:var(--ink);color:var(--bone);margin:0;padding:clamp(40px,6vh,70px) var(--pad) 26px;border-radius:0}
+.foot .row{display:grid;grid-template-columns:auto 1fr 1fr 1.3fr;gap:clamp(20px,4vw,70px);align-items:start}
+.foot .row img{height:56px;width:auto}
+.foot h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:10px;color:var(--amber)}
+.foot p,.foot a{font-size:15px;color:rgba(236,229,212,.85)}
+.foot .links{display:flex;flex-direction:column;gap:6px}
+.foot .word{font-family:var(--serif);line-height:.78;font-size:clamp(4rem,19.5vw,21rem);letter-spacing:-.04em;margin:clamp(40px,8vh,90px) 0 10px;white-space:nowrap;overflow:hidden;color:rgba(236,229,212,.1);display:flex;gap:.18em;align-items:flex-end}
+.foot .word b{font-weight:400;color:var(--bone);transition:color .5s}
+.foot .word:hover b{color:var(--amber)}
+.foot .legal{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);border-top:1px solid rgba(236,229,212,.14);padding-top:18px}
+
+/* ---------- touch targets ---------- */
+.menu-btn{min-height:44px;padding-left:8px}
+.nav .brand{display:inline-flex;align-items:center;min-height:44px}
+.nav{padding-block:4px}
+.st-list button{padding:8px 0}
+.foot .links a{display:inline-flex;align-items:center;min-height:44px}
+.foot .links{gap:0}
+.foot .links a.ulink{align-self:flex-start}
+#formMsg a{display:inline-flex;align-items:center;min-height:44px}
+.overlay .close{min-height:44px;padding:0 4px}
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .reel-grid{grid-template-columns:1fr 1fr;height:auto}
+  .reel-grid .frame{margin:0!important;aspect-ratio:3/4}
+  .reel-grid .frame:nth-child(2){grid-column:1/-1;order:-1;aspect-ratio:4/5}
+  .steps{grid-template-columns:1fr 1fr}
+  .step:nth-child(2){border-right:0}
+  .step:nth-child(n+3){border-top:1px solid rgba(10,12,10,.18)}
+  .step:nth-child(3){padding-left:0}
+  .book{grid-template-columns:1fr}
+  .room .in{grid-template-columns:1fr}
+  .foot .row{grid-template-columns:1fr 1fr}
+}
+@media (max-width:820px){
+  .hero .p1{width:calc(100% - 2*var(--pad));bottom:96px;font-size:12px}
+  .hero .p2{display:none}
+  .hero .cta{left:var(--pad);right:auto;bottom:28px}
+  .hero .t1{top:max(130px,19vh)}
+  .hero .t2{bottom:max(170px,22vh)}
+  .hero .kicker{top:max(100px,14vh)}
+  .scroll-hint{display:none}
+  .nav{grid-template-columns:auto 1fr auto;gap:10px}
+  .nav .brand{font-size:11px}
+  .nav .mark{order:3;display:none}
+  .about .pin{padding-top:104px}
+  .about .label{display:none}
+  .about .lead{padding-left:0;font-size:clamp(1.25rem,5.3vw,1.8rem)}
+  .about .photo{height:34vh;bottom:175px}
+  .about .tag{display:none}
+  .about .cta{right:var(--pad);left:var(--pad);display:flex;justify-content:center;bottom:100px}
+  .styles .pin{grid-template-columns:1fr;grid-template-rows:auto 1fr;align-content:start;gap:18px;padding-top:96px}
+  .st-media{width:min(70%,280px);max-height:36svh;justify-self:start}.st-list{align-self:start}
+  .styles .eyebrow.lab{display:none}
+  .st-list .t{font-size:clamp(1.8rem,8vw,2.6rem)}
+  .st-list .d{padding-left:0;font-size:14px}
+  .styles .cta{display:none}
+  .overlay a{font-size:clamp(2.6rem,13vw,4.4rem)}
+  .form{grid-template-columns:1fr}
+  .foot .row{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .steps{grid-template-columns:1fr}
+  .step,.step:nth-child(n){padding-left:0;border-right:0;border-top:1px solid rgba(10,12,10,.18)}
+  .reel-grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .mask>span,.fade-in{transition:none;transform:none;opacity:1}
+  .hero-bg img{animation:none;transform:none}
+  .band .track{animation:none}
+  #inkIn{display:none}
+  .drips .d,.edge .g{transition:none;transform:none}
+}
+</style>
+<noscript><style>.mask>span{transform:none}.fade-in{opacity:1;transform:none}#inkIn{display:none}.about .w{opacity:1}.st-media img:first-child{opacity:1;clip-path:none;transform:none}</style></noscript>
+</head>
+<body>
+<a class="skip" href="#book">Skip to booking</a>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="The Little Room BLR, home">The Little Room BLR</a>
+  <a class="mark" href="#top" aria-label="Home"><img src="assets/logo-bone.png" alt="The Little Room logo" width="30" height="30"></a>
+  <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="overlay"><span>Menu</span><i aria-hidden="true"></i></button>
+</header>
+
+<nav class="overlay" id="overlay" aria-label="Main menu" aria-hidden="true">
+  <button class="close" id="menuClose">Close ✕</button>
+  <ul>
+    <li><a href="#studio"><small>01</small>Studio</a></li>
+    <li><a href="#styles"><small>02</small>Styles</a></li>
+    <li><a href="#work"><small>03</small>Work</a></li>
+    <li><a href="#room"><small>04</small>The room</a></li>
+    <li><a href="#process"><small>05</small>Process</a></li>
+    <li><a href="#book"><small>06</small>Book</a></li>
+  </ul>
+  <div class="o-foot"><span>The Little Room BLR · Bengaluru · By appointment</span><a class="ulink" href="https://www.instagram.com/thelittleroomblr/" target="_blank" rel="noopener">@thelittleroomblr</a></div>
+</nav>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero" id="hero" aria-label="The Little Room BLR">
+  <div class="hero-bg"><img src="assets/room.jpg" alt="The tattoo chair in the dark green room, with the balcony garden and bamboo lanterns beyond the open doors" fetchpriority="high"></div>
+  <canvas id="inkFx" aria-hidden="true"></canvas>
+  <p class="eyebrow kicker fade-in">Private tattoo studio · Bengaluru</p>
+  <h1 class="t1"><span class="mask"><span>The <em>Little</em></span></span></h1>
+  <p class="p2 fade-in">Slow, considered work in a quiet room.<br><b>By appointment only</b></p>
+  <div class="t2 serif" aria-hidden="true"><span class="mask"><span>Room</span></span></div>
+  <p class="p1 fade-in">A private room for black &amp; grey realism, blackwork, fine line botanicals and ornamental linework. Drawn for you, one idea at a time.</p>
+  <a class="btn cta fade-in" href="#book"><span class="b-label">Book a session</span><span class="b-arrow" aria-hidden="true">↗</span></a>
+  <canvas id="inkIn" aria-hidden="true"></canvas>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="studio" aria-labelledby="aboutLead">
+  <div class="drips" id="drips" aria-hidden="true"></div>
+  <div class="pin">
+    <span class="eyebrow label">/ About us /</span>
+    <p class="lead" id="aboutLead" data-words='[["At The Little Room, a tattoo is never a transaction.",""],["It is a private hour in a quiet room,","b"],["lantern light, green walls and one chair,","i"],["where your idea is drawn, refined and then worn.","b"],["Whether you want bold black and grey, a single hairline branch or something sharp and symmetrical,","i"],["we sculpt it to sit on your body the way it should.",""]]'></p>
+    <div class="photo"><canvas id="blot" width="880" height="1100" role="img" aria-label="Black and grey realism tattoo of a samurai in a kabuto helmet, on an upper arm"></canvas></div>
+    <span class="tag">Black &amp; grey · Fine line · Blackwork</span>
+    <a class="btn cta" href="#book"><span class="b-label">Book your tattoo</span><span class="b-arrow" aria-hidden="true">↗</span></a>
+  </div>
+</section>
+
+<!-- STYLES -->
+<section class="styles" id="styles" aria-label="Tattoo styles">
+  <div class="edge" id="edgeStyles" aria-hidden="true"></div>
+  <div class="pin">
+    <span class="eyebrow lab">/ Styles /</span>
+    <div class="st-media" id="stMedia">
+      <img class="on" src="assets/samurai-hand.jpg" alt="Close-up black and grey tattoo of a wrapped hand gripping a sword hilt">
+      <img src="assets/anubis-still.jpg" alt="Blackwork tattoo of Anubis wearing headphones, on a calf" loading="lazy">
+      <img src="assets/fineline.jpg" alt="Fine line tattoo of a small bird on a flowering branch, wrapping a thigh" loading="lazy">
+      <img src="assets/ornamental.jpg" alt="Symmetrical ornamental linework tattoo in red fading to black on a collarbone" loading="lazy">
+    </div>
+    <ol class="st-list" id="stList">
+      <li class="on"><button type="button"><span class="t"><small>01</small>Black &amp; grey realism</span><span class="d">Portraits, armour and drapery built from soft shading and hard contrast, designed to age well.</span></button></li>
+      <li><button type="button"><span class="t"><small>02</small>Blackwork &amp; mythology</span><span class="d">Dense black, dotwork and symbols. Gods, guardians and pieces made to wrap a calf or a sleeve.</span></button></li>
+      <li><button type="button"><span class="t"><small>03</small>Fine line botanicals</span><span class="d">Hairline branches, birds and petals that follow the curve of the body instead of sitting on it.</span></button></li>
+      <li><button type="button"><span class="t"><small>04</small>Ornamental linework</span><span class="d">Sharp, symmetrical forms in black and red, drawn for the collarbone, spine or wrist.</span></button></li>
+    </ol>
+    <a class="btn cta" href="#book"><span class="b-label">Book your tattoo</span><span class="b-arrow" aria-hidden="true">↗</span></a>
+  </div>
+</section>
+
+<!-- WORK / REELS -->
+<section class="reels" id="work" aria-labelledby="workH">
+  <div class="sec-head">
+    <div><span class="eyebrow">/ Recent work /</span><h2 id="workH">Healed, <em>moving</em>, lived in.</h2></div>
+    <button class="pause-btn" id="pauseVids" type="button" aria-pressed="false">Pause videos</button>
+  </div>
+  <div class="reel-grid">
+    <div class="frame"><video src="assets/anubis.mp4" poster="assets/anubis-poster.jpg" muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture aria-label="Video turning around a blackwork Anubis calf tattoo"></video></div>
+    <div class="frame"><img src="assets/samurai-arm.jpg" alt="Black and grey samurai portrait tattoo covering an upper arm" loading="lazy"></div>
+    <div class="frame"><video src="assets/botanical.mp4" poster="assets/botanical-poster.jpg" muted loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture aria-label="Video of a fine line bird and flower tattoo on a leg in garden light"></video></div>
+  </div>
+</section>
+
+<!-- ROOM -->
+<section class="room" id="room" aria-labelledby="roomH">
+  <div class="edge" id="edgeRoom" aria-hidden="true"></div>
+  <div class="bg" id="roomBg"><img src="assets/room.jpg" alt="" loading="lazy"></div>
+  <div class="in">
+    <h2 id="roomH">Not just a tattoo studio. A <em>room</em> you want to stay in.</h2>
+    <div class="copy">
+      <span class="eyebrow">/ The room /</span>
+      <p>A freelance, private space with a vintage soul: green walls, woven lanterns, plants at the balcony door and a chair that is never rushed. It feels more like a living room than a shopfront, and that is the point.</p>
+      <div class="facts"><span>Private</span><span>Freelance</span><span>By appointment</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process" aria-labelledby="procH">
+  <div class="sec-head"><div><span class="eyebrow" style="color:var(--oxblood)">/ How it works /</span><h2 id="procH">From message to <em>healed</em> piece.</h2></div></div>
+  <div class="steps">
+    <div class="step"><div class="n">01</div><h3>Tell us the idea</h3><p>Message on Instagram with your idea, placement, rough size and any references you love.</p></div>
+    <div class="step"><div class="n">02</div><h3>We draw it</h3><p>A custom design made for your body, refined with you until it feels exactly right.</p></div>
+    <div class="step"><div class="n">03</div><h3>The session</h3><p>You settle into the private room and we build the piece, unhurried, from stencil to final line.</p></div>
+    <div class="step"><div class="n">04</div><h3>Heal well</h3><p>Clear aftercare guidance so the lines stay sharp and the shading stays soft for years.</p></div>
+  </div>
+</section>
+
+<!-- BAND -->
+<div class="band" id="band" aria-label="Studio mottos">
+  <div class="track" id="bandTrack"></div>
+</div>
+
+<!-- BOOK -->
+<section class="book" id="book" aria-labelledby="bookH">
+  <div>
+    <span class="eyebrow">/ Book /</span>
+    <h2 id="bookH">Let's draw something that <em>lasts.</em></h2>
+    <p class="lede">Share the idea, where it goes and roughly how big. The form opens an Instagram message to the studio with everything filled in, so you only have to press send.</p>
+  </div>
+  <form class="form" id="form" novalidate>
+    <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>
+    <div class="field"><label for="f-place">Placement</label>
+      <select id="f-place" name="placement"><option>Upper arm</option><option>Forearm</option><option>Leg or calf</option><option>Chest or collarbone</option><option>Back</option><option>Hand or wrist</option><option>Not sure yet</option></select></div>
+    <div class="field"><label for="f-style">Style</label>
+      <select id="f-style" name="style"><option>Black &amp; grey realism</option><option>Blackwork &amp; mythology</option><option>Fine line botanical</option><option>Ornamental linework</option><option>Not sure yet</option></select></div>
+    <div class="field"><label for="f-size">Rough size</label>
+      <select id="f-size" name="size"><option>Small (palm or less)</option><option>Medium (hand to forearm)</option><option>Large (half sleeve or more)</option><option>Not sure yet</option></select></div>
+    <div class="field full"><label for="f-idea">The idea</label><textarea id="f-idea" name="idea" placeholder="A story, a feeling, a reference… anything helps."></textarea></div>
+    <div id="formMsg" role="status" aria-live="polite"></div>
+    <div class="actions">
+      <button class="btn on-light" type="submit" id="sendBtn"><span class="b-label">Message on Instagram</span><span class="b-arrow" aria-hidden="true">↗</span></button>
+      <span class="note">By appointment only · Bengaluru</span>
+    </div>
+  </form>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="row">
+    <img src="assets/logo-bone.png" alt="The Little Room logo" width="56" height="56">
+    <div><h4>Studio</h4><p>Private tattoo studio<br>Bengaluru, India<br>By appointment only</p></div>
+    <div><h4>Find us</h4><div class="links"><a class="ulink" href="https://www.instagram.com/thelittleroomblr/" target="_blank" rel="noopener">Instagram @thelittleroomblr</a><a class="ulink" href="https://ig.me/m/thelittleroomblr" target="_blank" rel="noopener">Send a message</a></div></div>
+    <div><h4>Explore</h4><div class="links"><a class="ulink" href="#studio">Studio</a><a class="ulink" href="#styles">Styles</a><a class="ulink" href="#work">Work</a><a class="ulink" href="#book">Book</a></div></div>
+  </div>
+  <div class="word" aria-hidden="true"><b>Little</b><span>Room</span></div>
+  <div class="legal"><span>© 2026 The Little Room BLR</span><span>Website concept by Codzo</span></div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const easeOut=t=>1-Math.pow(1-t,3), easeIO=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SMALL=matchMedia('(max-width:820px), (pointer:coarse)').matches;
+const DPR=Math.min(devicePixelRatio||1,SMALL?1.5:2);
+
+/* ======================= INK ENGINE ======================= */
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function blobPath(ctx,x,y,r,seed,wob=.3){
+  const R=rng(seed),n=64,ks=[2,3,4,6,9].map(m=>({m,p:R()*6.283,a:wob/(m*.55)*R()}));
+  const P=[];
+  for(let i=0;i<n;i++){const ang=i/n*6.2832;let m=1;ks.forEach(k=>m+=k.a*Math.sin(k.m*ang+k.p));m=Math.max(.45,m);P.push([x+Math.cos(ang)*r*m,y+Math.sin(ang)*r*m])}
+  ctx.beginPath();
+  ctx.moveTo((P[0][0]+P[1][0])/2,(P[0][1]+P[1][1])/2);
+  for(let i=1;i<=n;i++){const a=P[i%n],b=P[(i+1)%n];ctx.quadraticCurveTo(a[0],a[1],(a[0]+b[0])/2,(a[1]+b[1])/2)}
+  ctx.closePath();
+}
+/* a full ink splat: body + satellite droplets + tapered streaks */
+function splat(ctx,x,y,r,seed,{drops=true,wob=.3}={}){
+  blobPath(ctx,x,y,r,seed,wob);ctx.fill();
+  if(!drops)return;
+  const R=rng(seed+77);
+  const nd=9+Math.floor(R()*10);
+  for(let i=0;i<nd;i++){
+    const a=R()*6.2832,d=r*(1.12+R()*1.3),s=r*(.025+R()*.1)*(1.5-(d/r-1.1)/1.3*.9);
+    ctx.beginPath();ctx.arc(x+Math.cos(a)*d,y+Math.sin(a)*d,Math.max(.6,s),0,6.2832);ctx.fill();
+  }
+  const ns=3+Math.floor(R()*3);
+  for(let i=0;i<ns;i++){
+    const a=R()*6.2832,len=r*(1.5+R()*1.1),w=r*(.05+R()*.07),
+      bx=x+Math.cos(a)*r*.8,by=y+Math.sin(a)*r*.8,tx=x+Math.cos(a)*len,ty=y+Math.sin(a)*len,nx=-Math.sin(a),ny=Math.cos(a);
+    ctx.beginPath();ctx.moveTo(bx+nx*w,by+ny*w);ctx.lineTo(tx,ty);ctx.lineTo(bx-nx*w,by-ny*w);ctx.closePath();ctx.fill();
+    ctx.beginPath();ctx.arc(tx,ty,w*.9,0,6.2832);ctx.fill();
+  }
+}
+function fit(c,w,h){c.width=Math.round(w*DPR);c.height=Math.round(h*DPR);const x=c.getContext('2d');x.setTransform(DPR,0,0,DPR,0,0);return x}
+
+/* ======================= HERO INTRO: ink recedes ======================= */
+const hero=$('#hero'),inkIn=$('#inkIn');
+function startReady(){document.documentElement.classList.add('ready');document.body.classList.add('ready');dripsIn()}
+function heroIntro(){
+  if(reduce){inkIn.remove();startReady();return}
+  const w=hero.clientWidth,h=hero.clientHeight,ctx=fit(inkIn,w,h);
+  const seeds=[];const cols=4,rows=3;
+  for(let i=0;i<cols*rows;i++){const cx=(i%cols+.5)/cols,cy=(Math.floor(i/cols)+.5)/rows;
+    seeds.push({x:(cx+(Math.random()-.5)*.18)*w,y:(cy+(Math.random()-.5)*.2)*h,d:Math.random()*.7,seed:Math.floor(Math.random()*9999),max:Math.max(w,h)*(.32+Math.random()*.12)})}
+  const t0=performance.now(),dur=2.4;let doneReady=false;
+  (function frame(now){
+    const t=(now-t0)/1000;
+    ctx.globalCompositeOperation='source-over';
+    if(t<.02){ctx.fillStyle='#0a0c0a';ctx.fillRect(0,0,w,h)}
+    ctx.globalCompositeOperation='destination-out';ctx.fillStyle='#000';
+    seeds.forEach(s=>{const p=clamp((t-s.d)/1.5);if(p>0){const r=s.max*easeOut(p);blobPath(ctx,s.x,s.y,r,s.seed,.34);ctx.fill();
+      if(p<1){const R=rng(s.seed);for(let k=0;k<5;k++){const a=R()*6.28,d=r*(1.05+R()*.45);ctx.beginPath();ctx.arc(s.x+Math.cos(a)*d,s.y+Math.sin(a)*d,r*.03*(1-p)+1,0,6.28);ctx.fill()}}}});
+    if(t>.55&&!doneReady){doneReady=true;startReady()}
+    if(t<dur)requestAnimationFrame(frame);
+    else{inkIn.style.opacity='0';setTimeout(()=>inkIn.remove(),700)}
+  })(performance.now());
+}
+
+/* ======================= HERO POINTER INK ======================= */
+(function(){
+  const cv=$('#inkFx');if(reduce)return;
+  let ctx,w,h,drops=[],raf=0,last=null;
+  const size=()=>{w=hero.clientWidth;h=hero.clientHeight;ctx=fit(cv,w,h)};size();addEventListener('resize',size);
+  function add(x,y,r,big){drops.push({x,y,r,seed:Math.floor(Math.random()*99999),born:performance.now(),life:big?4200:2600,big});if(!raf)raf=requestAnimationFrame(draw)}
+  function draw(now){
+    ctx.clearRect(0,0,w,h);
+    drops=drops.filter(d=>now-d.born<d.life);
+    drops.forEach(d=>{const age=now-d.born,grow=clamp(age/(d.big?420:240)),fade=clamp(1-(age-d.life*.55)/(d.life*.45));
+      ctx.globalAlpha=fade*(d.big?.95:.8);ctx.fillStyle=d.big?'#e8a24a':'#ece5d4';
+      splat(ctx,d.x,d.y,d.r*easeOut(grow),d.seed,{drops:d.big||grow>.6,wob:.34})});
+    ctx.globalAlpha=1;
+    raf=drops.length?requestAnimationFrame(draw):0;
+  }
+  hero.addEventListener('pointermove',e=>{
+    const b=hero.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top;
+    if(!last||Math.hypot(x-last.x,y-last.y)>(SMALL?50:70)){add(x,y,3+Math.random()*7,false);last={x,y}}
+  });
+  hero.addEventListener('pointerdown',e=>{
+    if(e.target.closest('a,button'))return;
+    const b=hero.getBoundingClientRect();add(e.clientX-b.left,e.clientY-b.top,34+Math.random()*34,true)
+  });
+})();
+
+/* ======================= DRIPS & EDGES (generated SVG) ======================= */
+function buildDrips(){
+  const el=$('#drips'),W=1440,H=230,R=rng(11);let s=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="${W}" height="8" fill="#0a0c0a"/>`;
+  let x=30;while(x<W-30){const len=40+R()*(R()>.7?170:90),wd=6+R()*12,delay=(R()*.9).toFixed(2);
+    s+=`<g class="d" style="transition-delay:${delay}s;transition-duration:${(1.6+len/60).toFixed(1)}s"><path d="M${x-wd*1.6},0 Q${x-wd/2},${len*.25} ${x-wd/2},${len*.6} L${x-wd/2},${len} A${wd/2},${wd/2} 0 0 0 ${x+wd/2},${len} L${x+wd/2},${len*.6} Q${x+wd/2},${len*.25} ${x+wd*1.6},0Z" fill="#0a0c0a"/><ellipse cx="${x}" cy="${len+wd*.35}" rx="${wd*.62}" ry="${wd*.9}" fill="#0a0c0a"/></g>`;
+    x+=30+R()*110}
+  el.innerHTML=s+'</svg>';
+}
+function buildEdge(el,color,seed){
+  const W=1440,H=140,R=rng(seed);let d=`M0,${H}`;
+  let x=0,pts=[];while(x<=W){const spike=R()>.78?30+R()*70:R()*26;pts.push([x,H-14-spike]);x+=20+R()*40}
+  pts.push([W,H-10]);
+  d+=` L0,${pts[0][1]}`;
+  for(let i=1;i<pts.length;i++){const a=pts[i-1],b=pts[i];d+=` Q${a[0]+(b[0]-a[0])*.3},${a[1]} ${(a[0]+b[0])/2},${(a[1]+b[1])/2}`}
+  d+=` L${W},${H}Z`;
+  let dots='';for(let i=0;i<46;i++){const px=R()*W,py=H-30-R()*(H-30),r=1.2+R()*R()*7;dots+=`<circle cx="${px.toFixed(0)}" cy="${py.toFixed(0)}" r="${r.toFixed(1)}"/>`}
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" fill="${color}"><g class="g"><path d="${d}"/>${dots}</g></svg>`;
+}
+buildDrips();buildEdge($('#edgeStyles'),'#0a0c0a',3);buildEdge($('#edgeRoom'),'#16221b',9);
+function dripsIn(){setTimeout(()=>$('#drips').classList.add('in'),1400)}
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+$$('.edge').forEach(e=>io.observe(e));
+
+/* ======================= ABOUT: word highlight + ink-blot photo ======================= */
+const about=$('#studio'),lead=$('#aboutLead');
+const toks=JSON.parse(lead.dataset.words);const words=[];
+toks.forEach(([txt,cls])=>txt.split(' ').forEach(wd=>{const s=document.createElement('span');s.className='w'+(cls?' '+cls:'');s.textContent=wd+' ';lead.appendChild(s);words.push(s)}));
+const blot=$('#blot');if(SMALL){blot.width=520;blot.height=650}const bctx=blot.getContext('2d'),face=new Image();let faceOK=false;
+face.onload=()=>{faceOK=true;drawBlot(blotP)};face.src='assets/samurai-face.jpg';
+const bs=[{x:.5,y:.5,s:1,k:1},{x:.15,y:.2,s:7,k:.8},{x:.88,y:.18,s:13,k:.75},{x:.12,y:.88,s:19,k:.8},{x:.9,y:.85,s:23,k:.85}];
+let blotP=0;
+function drawBlot(p){
+  if(!faceOK)return;const W=blot.width,H=blot.height;
+  bctx.globalCompositeOperation='source-over';bctx.clearRect(0,0,W,H);
+  if(p>=.995){bctx.drawImage(face,0,0,face.width,face.height,0,0,W,H);return}
+  const sc=W/880,Rmax=Math.hypot(W,H)*.52;
+  bctx.fillStyle='#000';
+  bs.forEach((b,i)=>{const pp=clamp((p-(i?.08*i:0))/(1-.08*i));if(pp<=0)return;splat(bctx,b.x*W,b.y*H,Rmax*b.k*easeOut(pp)*(i?.62:1),b.s+3,{drops:pp<.9,wob:.36})});
+  bctx.globalCompositeOperation='source-in';
+  const ir=face.width/face.height,cr=W/H;let sw=face.width,sh=face.height,sx=0,sy=0;
+  if(ir>cr){sw=sh*cr;sx=(face.width-sw)/2}else{sh=sw/cr;sy=(face.height-sh)/2}
+  bctx.drawImage(face,sx,sy,sw,sh,0,0,W,H);bctx.globalCompositeOperation='source-over';
+}
+function scrollAbout(){
+  const r=about.getBoundingClientRect(),total=r.height-innerHeight,p=clamp(-r.top/total);
+  const wp=clamp(p/.62);const n=Math.floor(wp*words.length*1.02);
+  words.forEach((w,i)=>w.classList.toggle('on',i<n));
+  const bp=clamp((p-.08)/.7);if(Math.abs(bp-blotP)>(SMALL?.012:.002)||(bp>=.995&&blotP<.995)||(bp<=0&&blotP>0)){blotP=bp;drawBlot(blotP)}
+}
+
+/* ======================= STYLES: pinned list ======================= */
+const styles=$('#styles'),items=$$('#stList li'),imgs=$$('#stMedia img');let cur=0;
+function setStyle(i){if(i===cur)return;cur=i;items.forEach((li,k)=>li.classList.toggle('on',k===i));imgs.forEach((im,k)=>im.classList.toggle('on',k===i))}
+let manualUntil=0;
+items.forEach((li,i)=>{li.addEventListener('mouseenter',()=>{manualUntil=performance.now()+1500;setStyle(i)});li.querySelector('button').addEventListener('click',()=>{manualUntil=performance.now()+2500;setStyle(i)})});
+function scrollStyles(){
+  if(performance.now()<manualUntil)return;
+  const r=styles.getBoundingClientRect(),total=r.height-innerHeight,p=clamp(-r.top/total,0,.999);
+  setStyle(Math.min(items.length-1,Math.floor(p*items.length)));
+}
+
+/* ======================= ROOM parallax ======================= */
+const room=$('#room'),roomBg=$('#roomBg');
+function scrollRoom(){const r=room.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;const p=(innerHeight-r.top)/(innerHeight+r.height);roomBg.style.transform=`translateY(${(p-.5)*-9}%) scale(1.04)`}
+
+/* ======================= scroll loop ======================= */
+let ticking=false;
+function onScroll(){if(ticking)return;ticking=true;requestAnimationFrame(()=>{scrollAbout();scrollStyles();scrollRoom();ticking=false})}
+addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll);
+
+/* ======================= videos ======================= */
+const vids=$$('video');let userPaused=false;
+const vio=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(e.isIntersecting&&!userPaused&&!reduce)v.play().catch(()=>{});else v.pause()}),{threshold:.35});
+vids.forEach(v=>vio.observe(v));
+$('#pauseVids').addEventListener('click',function(){userPaused=!userPaused;this.setAttribute('aria-pressed',userPaused);this.textContent=userPaused?'Play videos':'Pause videos';vids.forEach(v=>userPaused?v.pause():v.play().catch(()=>{}))});
+
+/* ======================= marquee ======================= */
+const phrases=['Not just a tattoo studio','Sculpted in shadow','The art of natural flow','Pretty face, wild choice','A tattoo lifestyle room','Vintage soul, freelance spirit'];
+const track=$('#bandTrack');let html='';for(let k=0;k<2;k++)phrases.forEach(p=>html+=`<span>${p}</span>`);track.innerHTML=html+html;
+
+/* ======================= menu ======================= */
+const ov=$('#overlay'),mb=$('#menuBtn');
+function menu(open){ov.classList.toggle('open',open);ov.setAttribute('aria-hidden',!open);mb.setAttribute('aria-expanded',open);document.body.style.overflow=open?'hidden':'';if(open)$('#menuClose').focus();else mb.focus()}
+mb.addEventListener('click',()=>menu(true));$('#menuClose').addEventListener('click',()=>menu(false));
+$$('#overlay a').forEach(a=>a.addEventListener('click',()=>menu(false)));
+addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('open'))menu(false)});
+
+/* ======================= booking form -> Instagram DM ======================= */
+$('#form').addEventListener('submit',e=>{
+  e.preventDefault();const f=e.target,msg=$('#formMsg');
+  if(!f.name.value.trim()){msg.textContent='Please add your name so the studio knows who is writing.';f.name.focus();return}
+  const text=`Hi The Little Room! I'm ${f.name.value.trim()}. I'd like to book a tattoo.\nStyle: ${f.style.value}\nPlacement: ${f.placement.value}\nSize: ${f.size.value}\nIdea: ${f.idea.value.trim()||'(will share references)'}`;
+  (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).catch(()=>{}).finally(()=>{
+    msg.innerHTML='Your message is ready (copied if your browser allowed it). <a class="ulink" style="font-weight:600" href="https://ig.me/m/thelittleroomblr" target="_blank" rel="noopener">Open Instagram and paste it ↗</a>';
+  });
+});
+
+/* ======================= go ======================= */
+addEventListener('load',()=>{heroIntro();onScroll()});
+if(document.readyState==='complete'){heroIntro();onScroll()}
+})();
+</script>
+</body>
+</html>
